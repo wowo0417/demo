@@ -1,0 +1,50 @@
+正负面研判
+==========
+
+**介绍**
+
+本接口将文本的情感分为负面和非负面两类。
+
+本引擎用微博、新闻、汽车、餐饮等不同行业语料进行标注和机器学习，调用时请通过 URL 参数选择特定的模型，以获得最佳的情感判断准确率。
+
+URL
+	``http://XXXXXX/sentiment/analysis``
+
+HTTP Method
+	``POST``
+
+HTTP Header
+	``Content-Type``
+		``application/json``
+	``Accept``
+		``application/json``
+	``X-Token``
+		``YOUR_API_TOKEN`` （需要替换成您自己的 Token）
+
+HTTP 请求 Body
+	JSON 格式的需要做情感判定的文本或者文本组成的列表。比如：
+	``["\u4ed6\u662f\u4e2a\u50bb\u903c", "\u7f8e\u597d\u7684\u4e16\u754c"]``
+
+HTTP 返回 Body
+	JSON 格式的 ``[double, double]`` 类型组成的列表。每个元素分别表示请求的列表对应位置的文本的情感判断结果；第一个值为非负面概率，第二个值为负面概率，两个值相加和为 ``1`` 。
+
+
+Python 调用示例
+
+.. code-block:: python
+
+	# -*- encoding: utf-8 -*-
+	from __future__ import print_function, unicode_literals
+	import json
+	import requests
+
+
+	SENTIMENT_URL = 'http://XXXXXX/sentiment/analysis'
+	# 注意：在测试时请更换为您的API Token
+	headers = {'X-Token': 'YOUR_API_TOKEN'}
+
+	s = ['他是个傻逼', '美好的世界']
+	data = json.dumps(s)
+	resp = requests.post(SENTIMENT_URL, headers=headers, data=data.encode('utf-8'))
+
+	print(resp.text)
